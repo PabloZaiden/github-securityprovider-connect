@@ -4,7 +4,7 @@ import * as Request from "request";
 let PassportGithub = require("passport-github");
 import * as Github from "github";
 
-export default class GithubSecurityProvider implements SecurityProvider {
+export class GithubSecurityProvider implements SecurityProvider {
 
     private authenticateMiddleware: Express.Handler;
     private authorizeMiddleware: Express.Handler;

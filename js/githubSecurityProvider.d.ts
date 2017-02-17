@@ -1,6 +1,6 @@
 /// <reference types="express" />
 import * as Express from "express";
-export default class GithubSecurityProvider implements SecurityProvider {
+export declare class GithubSecurityProvider implements SecurityProvider {
     private authenticateMiddleware;
     private authorizeMiddleware;
     constructor(authenticateUrl: string);
