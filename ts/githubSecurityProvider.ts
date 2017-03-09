@@ -8,8 +8,10 @@ export class GithubSecurityProvider implements SecurityProvider {
 
     private authenticateMiddleware: Express.Handler;
     private authorizeMiddleware: Express.Handler;
+    private static defaultScope = "repo";
 
-    constructor(authenticateUrl: string) {
+
+    constructor(authenticateUrl: string, scope = GithubSecurityProvider.defaultScope) {
         let githubClientId = process.env.GITHUB_CLIENT_ID;
         let githubClientSecret = process.env.GITHUB_CLIENT_SECRET;
         let githubOrganization = process.env.GITHUB_ORGANIZATION;
@@ -36,7 +38,7 @@ export class GithubSecurityProvider implements SecurityProvider {
             clientID: githubClientId,
             clientSecret: githubClientSecret,
             callbackURL: githubCallbackUrl,
-            scope: "repo"
+            scope: scope
         },
             function (accessToken: string, refreshToken: string, profile: any, done: Function) {
                 let login = profile._json.login;
