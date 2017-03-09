@@ -41,27 +41,19 @@ export class GithubSecurityProvider implements SecurityProvider {
             function (accessToken: string, refreshToken: string, profile: any, done: Function) {
                 let login = profile._json.login;
 
-                let gh = new Github({
-                    protocol: "https",
-                    headers: {
-                        "user-agent": "github-securityprovider-connect"
-                    }
-                });
-
-                gh.authenticate({
-                    type: "oauth",
-                    token: accessToken
-                });
+                let gh = GithubSecurityProvider.getGithubClient(accessToken);
 
                 gh.orgs.checkMembership({
                     username: login,
                     org: githubOrganization
                 }).then(() => {
-                    done(null, {
+                    let user: GithubUser = {
                         username: login,
                         user_id: profile._json.id,
                         accessToken: accessToken
-                    });
+                    };
+
+                    done(null, user);
                 }).catch((err) => {
                     done(new Error("User is not a member of the required organization: " + githubOrganization));
                 });
@@ -74,7 +66,18 @@ export class GithubSecurityProvider implements SecurityProvider {
             if (!req.isAuthenticated()) {
                 res.redirect(authenticateUrl);
             } else {
-                next();
+                let user = req.user as GithubUser;
+                let gh = GithubSecurityProvider.getGithubClient(user.accessToken);
+                
+                gh.orgs.checkMembership({
+                    username: user.username,
+                    org: githubOrganization
+                }).then(() => {
+                    next();
+                }).catch((err) => {
+                    req.logout();
+                    res.redirect(authenticateUrl);
+                });
             }
         }
 
@@ -88,6 +91,28 @@ export class GithubSecurityProvider implements SecurityProvider {
     getAuthenticateMiddleware(): Express.Handler {
         return this.authenticateMiddleware;
     }
+
+    private static getGithubClient(token: string) {
+        let gh = new Github({
+            protocol: "https",
+            headers: {
+                "User-Agent": "github-securityprovider-connect"
+            }
+        });
+
+        gh.authenticate({
+            type: "oauth",
+            token: token
+        });
+
+        return gh;
+    }
+}
+
+export interface GithubUser {
+    username: string;
+    user_id: string;
+    accessToken: string;
 }
 
 export interface SecurityProvider {

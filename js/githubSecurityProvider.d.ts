@@ -6,6 +6,12 @@ export declare class GithubSecurityProvider implements SecurityProvider {
     constructor(authenticateUrl: string);
     getAuthorizeMiddleware(): Express.Handler;
     getAuthenticateMiddleware(): Express.Handler;
+    private static getGithubClient(token);
+}
+export interface GithubUser {
+    username: string;
+    user_id: string;
+    accessToken: string;
 }
 export interface SecurityProvider {
     getAuthorizeMiddleware(): Express.Handler;
