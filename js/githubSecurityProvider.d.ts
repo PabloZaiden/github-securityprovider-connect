@@ -3,7 +3,8 @@ import * as Express from "express";
 export declare class GithubSecurityProvider implements SecurityProvider {
     private authenticateMiddleware;
     private authorizeMiddleware;
-    constructor(authenticateUrl: string);
+    private static defaultScope;
+    constructor(authenticateUrl: string, scope?: string);
     getAuthorizeMiddleware(): Express.Handler;
     getAuthenticateMiddleware(): Express.Handler;
     private static getGithubClient(token);
