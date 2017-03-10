@@ -5,6 +5,9 @@ let PassportGithub = require("passport-github");
 const Github = require("github");
 class GithubSecurityProvider {
     constructor(authenticateUrl, options) {
+        if (options == undefined) {
+            options = {};
+        }
         let scope = options.scope;
         let seconds = options.secondsUntilCheckPermissionsAgain;
         if (scope == undefined) {

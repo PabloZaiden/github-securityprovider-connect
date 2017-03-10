@@ -5,7 +5,7 @@ export declare class GithubSecurityProvider implements SecurityProvider {
     private authorizeMiddleware;
     private static defaultScope;
     private static defaultSeconds;
-    constructor(authenticateUrl: string, options: GithubSecurityProviderOptions);
+    constructor(authenticateUrl: string, options?: GithubSecurityProviderOptions);
     getAuthorizeMiddleware(): Express.Handler;
     getAuthenticateMiddleware(): Express.Handler;
     private static getGithubClient(token);

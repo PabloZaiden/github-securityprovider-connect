@@ -12,7 +12,11 @@ export class GithubSecurityProvider implements SecurityProvider {
     private static defaultSeconds = 86400;
 
 
-    constructor(authenticateUrl: string, options: GithubSecurityProviderOptions) {
+    constructor(authenticateUrl: string, options?: GithubSecurityProviderOptions) {
+        if (options == undefined) {
+            options = {};
+        }
+        
         let scope = options.scope;
         let seconds = options.secondsUntilCheckPermissionsAgain;
 
