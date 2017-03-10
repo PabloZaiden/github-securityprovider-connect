@@ -84,9 +84,12 @@ export class GithubSecurityProvider implements SecurityProvider {
                 res.redirect(authenticateUrl);
             } else {
                 let user = req.user as GithubUser;
-                let expireDate = new Date(user.expire);
+                let expireDate: Date;
+                if (user.expire != undefined) {
+                    expireDate = new Date(user.expire);
+                }
 
-                if (expireDate > new Date()) {
+                if (expireDate != undefined && expireDate > new Date()) {
                     next();
                 } else {
                     let gh = GithubSecurityProvider.getGithubClient(user.accessToken);
@@ -149,8 +152,8 @@ export interface GithubUser {
 }
 
 export interface GithubSecurityProviderOptions {
-    scope: string;
-    secondsUntilCheckPermissionsAgain: number;
+    scope?: string;
+    secondsUntilCheckPermissionsAgain?: number;
 }
 
 export interface SecurityProvider {

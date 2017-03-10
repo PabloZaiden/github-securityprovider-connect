@@ -61,8 +61,11 @@ class GithubSecurityProvider {
             }
             else {
                 let user = req.user;
-                let expireDate = new Date(user.expire);
-                if (expireDate > new Date()) {
+                let expireDate;
+                if (user.expire != undefined) {
+                    expireDate = new Date(user.expire);
+                }
+                if (expireDate != undefined && expireDate > new Date()) {
                     next();
                 }
                 else {

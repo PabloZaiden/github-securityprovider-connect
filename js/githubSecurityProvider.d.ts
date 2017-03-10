@@ -17,8 +17,8 @@ export interface GithubUser {
     expire: string;
 }
 export interface GithubSecurityProviderOptions {
-    scope: string;
-    secondsUntilCheckPermissionsAgain: number;
+    scope?: string;
+    secondsUntilCheckPermissionsAgain?: number;
 }
 export interface SecurityProvider {
     getAuthorizeMiddleware(): Express.Handler;
